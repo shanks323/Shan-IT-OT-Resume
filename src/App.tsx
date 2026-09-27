@@ -16,13 +16,17 @@ import { EditorModal } from './components/EditorModal';
 import { PhotoEditorModal } from './components/PhotoEditorModal';
 import { ShareModal } from './components/ShareModal';
 import { ReadOnlyBanner } from './components/ReadOnlyBanner';
+import { exportResumeToSinglePagePdf } from './utils/pdfExport';
+import { applyThemeVariables } from './utils/accentThemes';
 import { 
   Phone, 
   Mail, 
   MessageSquare, 
   Printer, 
+  Download,
   ShieldCheck,
-  Share2
+  Share2,
+  Loader2
 } from 'lucide-react';
 
 const STORAGE_KEY_DATA = 'shanker_resume_data_v1';
@@ -51,6 +55,7 @@ export default function App() {
   const urlParams = getUrlParams();
 
   const [isReadOnly, setIsReadOnly] = useState<boolean>(urlParams.isReadOnly);
+  const [isGeneratingPdf, setIsGeneratingPdf] = useState(false);
 
   const [resumeData, setResumeData] = useState<ResumeData>(() => {
     try {
@@ -106,6 +111,11 @@ export default function App() {
     }
   }, [settings]);
 
+  // Inject dynamic CSS custom properties into :root whenever accent changes
+  useEffect(() => {
+    applyThemeVariables(settings.accent);
+  }, [settings.accent]);
+
   // Keep URL in sync with currently active variation
   useEffect(() => {
     try {
@@ -132,6 +142,21 @@ export default function App() {
 
   const handlePrint = () => {
     window.print();
+  };
+
+  const handleDownloadPdf = async () => {
+    setIsGeneratingPdf(true);
+    await exportResumeToSinglePagePdf({
+      elementId: 'resume-document',
+      themeName: settings.theme,
+      onComplete: () => setIsGeneratingPdf(false),
+      onError: (err) => {
+        console.error(err);
+        setIsGeneratingPdf(false);
+        // Fallback to system print
+        window.print();
+      },
+    });
   };
 
   const handleResetData = () => {
@@ -162,6 +187,8 @@ export default function App() {
           data={resumeData}
           settings={settings}
           onPrint={handlePrint}
+          onDownloadPdf={handleDownloadPdf}
+          isGeneratingPdf={isGeneratingPdf}
           onOpenShare={() => setShareModalOpen(true)}
           onExitReadOnly={() => setIsReadOnly(false)}
           onOpenTopology={() => setTopologyOpen(true)}
@@ -176,7 +203,10 @@ export default function App() {
             onOpenEditor={() => setEditorOpen(true)}
             onOpenShare={() => setShareModalOpen(true)}
             onOpenPhotoModal={() => setPhotoModalOpen(true)}
+            onDownloadPdf={handleDownloadPdf}
             onPrint={handlePrint}
+            isGeneratingPdf={isGeneratingPdf}
+            email={resumeData.email}
           />
 
           {/* Recruiter Banner & Quick Contact Links */}
@@ -214,7 +244,7 @@ export default function App() {
                 </a>
                 <span className="text-slate-700">|</span>
                 <a
-                  href={`mailto:${resumeData.email}?subject=Job%20Opportunity%20-%20IT%20Support%20/%20IT/OT`}
+                  href={`mailto:${(resumeData.email || 'shankerdayallan80@gmail.com').replace(/^mailto:/i, '')}?subject=Job%20Opportunity%20-%20IT%20Support%20/%20IT/OT`}
                   className="text-slate-300 hover:text-white font-medium flex items-center gap-1 transition-colors"
                 >
                   <Mail className="w-3.5 h-3.5 text-blue-400" />
@@ -253,7 +283,7 @@ export default function App() {
       {/* Sticky Bottom Quick-Bar for Recruiters (Desktop & Mobile) */}
       <div className="no-print fixed bottom-4 z-40 left-1/2 -translate-x-1/2 bg-slate-900/90 backdrop-blur-md border border-slate-700/80 shadow-2xl rounded-full px-4 py-2 flex items-center gap-3 text-xs">
         <span className="hidden sm:inline font-medium text-slate-300">
-          Shanker Dayallan · <span className="text-blue-400">Ready to Interview</span>
+          Shanker Dayallan · <span className="text-emerald-400">1-Page A4 Ready</span>
         </span>
         <div className="flex items-center gap-2">
           <a
@@ -272,6 +302,14 @@ export default function App() {
             <MessageSquare className="w-3.5 h-3.5 text-emerald-400" />
             <span>WhatsApp</span>
           </a>
+          <a
+            href={`mailto:${(resumeData.email || 'shankerdayallan80@gmail.com').replace(/^mailto:/i, '')}?subject=Job%20Opportunity%20-%20IT%20Support%20/%20IT/OT`}
+            className="flex items-center gap-1 px-3 py-1.5 rounded-full bg-slate-800 hover:bg-slate-700 text-slate-200 transition-colors"
+            title="Email Candidate"
+          >
+            <Mail className="w-3.5 h-3.5 text-blue-400" />
+            <span className="hidden xs:inline">Email</span>
+          </a>
           <button
             onClick={() => setShareModalOpen(true)}
             className="flex items-center gap-1 px-3 py-1.5 rounded-full bg-slate-800 hover:bg-slate-700 text-slate-200 transition-colors cursor-pointer"
@@ -281,11 +319,21 @@ export default function App() {
             <span>Share Link</span>
           </button>
           <button
-            onClick={handlePrint}
-            className="flex items-center gap-1 px-3.5 py-1.5 rounded-full bg-blue-600 hover:bg-blue-500 text-white font-semibold transition-colors cursor-pointer"
+            onClick={handleDownloadPdf}
+            disabled={isGeneratingPdf}
+            className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-blue-600 hover:bg-blue-500 text-white font-semibold transition-colors cursor-pointer disabled:opacity-50"
           >
-            <Printer className="w-3.5 h-3.5" />
-            <span>Save PDF</span>
+            {isGeneratingPdf ? (
+              <>
+                <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                <span>Exporting...</span>
+              </>
+            ) : (
+              <>
+                <Download className="w-3.5 h-3.5" />
+                <span>Download 1-Page PDF</span>
+              </>
+            )}
           </button>
         </div>
       </div>

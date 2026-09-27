@@ -103,9 +103,10 @@ ${data.education.map(ed => `• ${ed.degree} - ${ed.institution} (${ed.yearOrPer
               <button
                 key={t.id}
                 onClick={() => onUpdateSettings({ theme: t.id })}
+                style={{ backgroundColor: settings.theme === t.id ? 'var(--accent-bar, #2563eb)' : undefined }}
                 className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer whitespace-nowrap flex items-center gap-1.5 ${
                   settings.theme === t.id
-                    ? 'bg-blue-600 text-white shadow-sm'
+                    ? 'text-white shadow-sm'
                     : 'text-slate-400 hover:text-white hover:bg-slate-900'
                 }`}
               >

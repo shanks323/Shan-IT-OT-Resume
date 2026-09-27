@@ -6,10 +6,8 @@ import {
   Phone, 
   Mail, 
   MapPin, 
-  Linkedin, 
   Cpu, 
   ShieldCheck, 
-  Network, 
   HardDrive, 
   Settings2, 
   Server, 
@@ -28,47 +26,60 @@ export const IndustrialTheme: React.FC<Props> = ({ data, settings, onOpenTopolog
   const palette = ACCENT_PALETTES[settings.accent] || ACCENT_PALETTES.slate;
 
   return (
-    <div className="w-full text-slate-800 antialiased font-sans">
-      {/* Industrial Header Banner */}
-      <header className="border-b-2 pb-4 mb-4" style={{ borderColor: palette.primaryDark }}>
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-          <div className="space-y-1">
+    <div className="w-full text-slate-800 antialiased font-sans leading-snug">
+      {/* Industrial Header Banner with Dynamic Primary Color */}
+      <header 
+        className="border-b-2 pb-2.5 mb-2.5" 
+        style={{ borderColor: 'var(--primary-color, #1e3a8a)' }}
+      >
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div className="space-y-0.5">
             <div className="flex items-center gap-2">
-              <span className="font-mono-tech text-[11px] font-bold uppercase tracking-widest text-slate-500 bg-slate-100 px-2 py-0.5 rounded border border-slate-300">
+              <span 
+                className="font-mono-tech text-[10px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded border"
+                style={{ 
+                  backgroundColor: 'var(--primary-light, #eff6ff)', 
+                  color: 'var(--primary-color, #1e3a8a)', 
+                  borderColor: 'var(--accent-border, #bfdbfe)' 
+                }}
+              >
                 INDUSTRIAL & IT INFRASTRUCTURE
               </span>
-              <span className="font-mono-tech text-[10px] text-slate-400">SYS-ID // MY-42300</span>
+              <span className="font-mono-tech text-[9.5px] text-slate-400">SYS-ID // MY-42300</span>
             </div>
             
-            <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-slate-900 font-display">
+            <h1 className="text-2xl sm:text-[26px] font-extrabold tracking-tight text-slate-900 font-display">
               {data.fullName}
             </h1>
             
-            <div className="font-mono-tech text-xs sm:text-[13px] font-semibold tracking-wide" style={{ color: palette.headingColor }}>
+            <div 
+              className="font-mono-tech text-[11.5px] font-bold tracking-wide" 
+              style={{ color: 'var(--heading-color, #1e3a8a)' }}
+            >
               {data.title}
             </div>
 
             {/* Industrial Contact Grid */}
-            <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-slate-600 font-mono-tech pt-1">
-              <span className="inline-flex items-center gap-1.5">
-                <Phone className="w-3.5 h-3.5 text-slate-500" />
+            <div className="flex flex-wrap items-center gap-x-3 gap-y-0.5 text-[11px] text-slate-600 font-mono-tech pt-0.5">
+              <span className="inline-flex items-center gap-1">
+                <Phone className="w-3 h-3 text-slate-500" />
                 <a href={`tel:${data.phone.replace(/\s+/g, '')}`} className="hover:underline">{data.phone}</a>
               </span>
               <span className="text-slate-300">/</span>
-              <span className="inline-flex items-center gap-1.5">
-                <Mail className="w-3.5 h-3.5 text-slate-500" />
+              <span className="inline-flex items-center gap-1">
+                <Mail className="w-3 h-3 text-slate-500" />
                 <a href={`mailto:${data.email}`} className="hover:underline">{data.email}</a>
               </span>
               <span className="text-slate-300">/</span>
-              <span className="inline-flex items-center gap-1.5">
-                <MapPin className="w-3.5 h-3.5 text-slate-500" />
+              <span className="inline-flex items-center gap-1">
+                <MapPin className="w-3 h-3 text-slate-500" />
                 <span>{data.location}</span>
               </span>
             </div>
           </div>
 
           {/* Right Visual / Avatar or Tech Badge */}
-          <div className="flex items-center gap-3 shrink-0">
+          <div className="flex items-center gap-2.5 shrink-0">
             {settings.showAvatar && data.avatarUrl && (
               <div 
                 onClick={onOpenPhotoModal}
@@ -79,31 +90,58 @@ export const IndustrialTheme: React.FC<Props> = ({ data, settings, onOpenTopolog
                   src={data.avatarUrl}
                   alt={data.fullName}
                   referrerPolicy="no-referrer"
-                  className="w-16 h-16 sm:w-20 sm:h-20 rounded-lg object-cover object-top border-2 border-slate-700 shadow-sm transition-transform group-hover:scale-105"
+                  className="w-14 h-14 sm:w-16 sm:h-16 rounded-lg object-cover object-top border-2 shadow-sm transition-transform group-hover:scale-105"
+                  style={{ borderColor: 'var(--accent-border, #bfdbfe)' }}
                 />
                 {onOpenPhotoModal && (
-                  <div className="no-print absolute inset-0 rounded-lg bg-slate-950/40 opacity-0 group-hover:opacity-100 flex items-center justify-center text-white text-[10px] font-mono-tech transition-opacity">
+                  <div className="no-print photo-overlay-badge change-photo-badge absolute inset-0 rounded-lg bg-slate-950/40 opacity-0 group-hover:opacity-100 flex items-center justify-center text-white text-[9px] font-mono-tech transition-opacity">
                     EDIT
                   </div>
                 )}
               </div>
             )}
-            <div className="hidden sm:block text-right font-mono-tech text-[10px] text-slate-500 border-l border-slate-200 pl-3">
-              <div>STATUS: READY TO DEPLOY</div>
-              <div className="text-emerald-700 font-bold mt-0.5">● SIEMENS CERTIFIED</div>
-              <div className="text-blue-700 font-bold">● GOOGLE IT VERIFIED</div>
+            <div 
+              className="hidden sm:block text-right font-mono-tech text-[9.5px] border-l pl-2.5"
+              style={{ borderColor: 'var(--accent-border, #bfdbfe)' }}
+            >
+              <div className="text-slate-500">STATUS: FIELD READY</div>
+              <div 
+                className="font-bold mt-0.5"
+                style={{ color: 'var(--accent-bar, #2563eb)' }}
+              >
+                ● SIEMENS CERTIFIED
+              </div>
+              <div 
+                className="font-bold"
+                style={{ color: 'var(--primary-color, #1e3a8a)' }}
+              >
+                ● GOOGLE IT VERIFIED
+              </div>
             </div>
           </div>
         </div>
 
-        {/* Skill Matrix Summary Bar */}
-        <div className="grid grid-cols-2 sm:grid-cols-5 gap-2 mt-4 pt-3 border-t border-dashed border-slate-200 text-xs">
+        {/* Skill Matrix Summary Bar (Dynamic Accent Boxes) */}
+        <div 
+          className="grid grid-cols-5 gap-1.5 mt-2 pt-2 border-t border-dashed text-[10.5px]"
+          style={{ borderColor: 'var(--accent-border, #bfdbfe)' }}
+        >
           {data.skillCategories.map((cat) => (
-            <div key={cat.id} className="p-2 rounded bg-slate-50 border border-slate-200/80">
-              <div className="font-bold text-[11px] uppercase tracking-wider text-slate-900 mb-1 flex items-center justify-between">
-                <span>{cat.name}</span>
+            <div 
+              key={cat.id} 
+              className="p-1.5 rounded border"
+              style={{ 
+                backgroundColor: 'var(--primary-light, #eff6ff)', 
+                borderColor: 'var(--accent-border, #bfdbfe)' 
+              }}
+            >
+              <div 
+                className="font-bold text-[10px] uppercase tracking-wider mb-0.5"
+                style={{ color: 'var(--heading-color, #1e3a8a)' }}
+              >
+                {cat.name}
               </div>
-              <div className="text-[10px] text-slate-600 line-clamp-2">
+              <div className="text-[9.5px] text-slate-700 line-clamp-2 leading-tight">
                 {cat.skills.join(' · ')}
               </div>
             </div>
@@ -112,54 +150,87 @@ export const IndustrialTheme: React.FC<Props> = ({ data, settings, onOpenTopolog
       </header>
 
       {/* Industrial Grid Body */}
-      <div className="space-y-4">
+      <div className="space-y-2.5">
         {/* Profile */}
-        <section className="bg-slate-50/70 p-3.5 rounded-lg border-l-4 border-slate-800 border-t border-r border-b border-slate-200">
-          <div className="flex items-center justify-between mb-1.5">
-            <h2 className="font-mono-tech text-xs font-bold uppercase tracking-wider text-slate-900 flex items-center gap-1.5">
-              <ShieldCheck className="w-4 h-4 text-slate-700" />
+        <section 
+          className="p-2.5 rounded-lg border-l-4 border-t border-r border-b"
+          style={{ 
+            borderLeftColor: 'var(--primary-color, #1e3a8a)', 
+            borderColor: 'var(--accent-border, #bfdbfe)',
+            backgroundColor: 'var(--primary-light, #eff6ff)'
+          }}
+        >
+          <div className="flex items-center justify-between mb-0.5">
+            <h2 
+              className="font-mono-tech text-[10.5px] font-bold uppercase tracking-wider flex items-center gap-1.5"
+              style={{ color: 'var(--heading-color, #1e3a8a)' }}
+            >
+              <ShieldCheck className="w-3.5 h-3.5" style={{ color: 'var(--accent-bar, #2563eb)' }} />
               Executive Profile & Technical Baseline
             </h2>
-            <span className="font-mono-tech text-[10px] text-slate-500">REF: SUMMARY.01</span>
+            <span className="font-mono-tech text-[9px] text-slate-500">REF: SUMMARY.01</span>
           </div>
-          <p className="text-xs sm:text-[13px] text-slate-700 leading-relaxed text-justify">
+          <p className="text-[11px] text-slate-700 leading-normal text-justify">
             {data.professionalProfile}
           </p>
         </section>
 
         {/* 2-Column Section: Experience + IT/OT Featured Lab */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
+        <div className="grid grid-cols-12 gap-3">
           {/* Main Experience Column (7 cols) */}
-          <div className="lg:col-span-7 space-y-4">
+          <div className="col-span-7 space-y-2.5">
             {/* Experience */}
             <section>
-              <div className="flex items-center justify-between border-b pb-1 mb-2.5" style={{ borderColor: '#cbd5e1' }}>
-                <h2 className="font-mono-tech text-xs font-bold uppercase tracking-wider text-slate-900 flex items-center gap-1.5">
-                  <HardDrive className="w-4 h-4 text-slate-700" />
+              <div 
+                className="flex items-center justify-between border-b pb-0.5 mb-1.5" 
+                style={{ borderColor: 'var(--accent-border, #bfdbfe)' }}
+              >
+                <h2 
+                  className="font-mono-tech text-[11px] font-bold uppercase tracking-wider flex items-center gap-1.5"
+                  style={{ color: 'var(--heading-color, #1e3a8a)' }}
+                >
+                  <HardDrive className="w-3.5 h-3.5" style={{ color: 'var(--accent-bar, #2563eb)' }} />
                   Field & Industrial Experience
                 </h2>
-                <span className="font-mono-tech text-[10px] text-slate-500">TIMELINE</span>
+                <span className="font-mono-tech text-[9px] text-slate-500">TIMELINE</span>
               </div>
 
               {data.experience.map((exp) => (
-                <div key={exp.id} className="p-3 rounded-lg border border-slate-200 bg-white">
-                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 mb-1.5 pb-1 border-b border-dashed border-slate-200">
+                <div 
+                  key={exp.id} 
+                  className="p-2.5 rounded-lg border bg-white mb-2 last:mb-0"
+                  style={{ borderColor: 'var(--accent-border, #bfdbfe)' }}
+                >
+                  <div 
+                    className="flex flex-col sm:flex-row sm:items-center justify-between gap-0.5 mb-1 pb-1 border-b border-dashed"
+                    style={{ borderColor: 'var(--accent-border, #bfdbfe)' }}
+                  >
                     <div>
-                      <span className="text-xs font-bold text-slate-900">{exp.role}</span>
-                      <span className="text-slate-400 mx-1.5">@</span>
-                      <span className="text-xs font-bold text-slate-700">{exp.company}</span>
+                      <span className="text-[11.5px] font-bold text-slate-900">{exp.role}</span>
+                      <span className="text-slate-400 mx-1">@</span>
+                      <span 
+                        className="text-[11px] font-bold"
+                        style={{ color: 'var(--primary-color, #1e3a8a)' }}
+                      >
+                        {exp.company}
+                      </span>
                     </div>
-                    <div className="font-mono-tech text-[11px] text-slate-600">
+                    <div className="font-mono-tech text-[10px] text-slate-600">
                       <span>{exp.location}</span>
                       <span className="mx-1">/</span>
                       <span className="font-bold text-slate-800">{exp.period}</span>
                     </div>
                   </div>
-                  <ul className="space-y-1.5 text-xs text-slate-700">
+                  <ul className="space-y-0.5 text-[11px] text-slate-700">
                     {exp.bullets.map((b, idx) => (
-                      <li key={idx} className="flex items-start gap-2">
-                        <span className="text-slate-400 font-mono-tech mt-0.5">▸</span>
-                        <span className="leading-snug">{b}</span>
+                      <li key={idx} className="flex items-start gap-1.5">
+                        <span 
+                          className="font-mono-tech mt-0.5 text-[10px]"
+                          style={{ color: 'var(--accent-bar, #2563eb)' }}
+                        >
+                          ▸
+                        </span>
+                        <span className="leading-tight">{b}</span>
                       </li>
                     ))}
                   </ul>
@@ -169,52 +240,88 @@ export const IndustrialTheme: React.FC<Props> = ({ data, settings, onOpenTopolog
 
             {/* Featured IT/OT Project */}
             <section>
-              <div className="flex items-center justify-between border-b pb-1 mb-2.5" style={{ borderColor: '#cbd5e1' }}>
-                <h2 className="font-mono-tech text-xs font-bold uppercase tracking-wider text-slate-900 flex items-center gap-1.5">
-                  <Cpu className="w-4 h-4 text-slate-700" />
+              <div 
+                className="flex items-center justify-between border-b pb-0.5 mb-1.5" 
+                style={{ borderColor: 'var(--accent-border, #bfdbfe)' }}
+              >
+                <h2 
+                  className="font-mono-tech text-[11px] font-bold uppercase tracking-wider flex items-center gap-1.5"
+                  style={{ color: 'var(--heading-color, #1e3a8a)' }}
+                >
+                  <Cpu className="w-3.5 h-3.5" style={{ color: 'var(--accent-bar, #2563eb)' }} />
                   Industrial IT/OT Project Spotlight
                 </h2>
                 {onOpenTopology && (
                   <button
                     onClick={onOpenTopology}
                     type="button"
-                    className="no-print text-[11px] font-mono-tech text-blue-600 font-bold hover:underline flex items-center gap-1 cursor-pointer"
+                    className="no-print text-[10px] font-mono-tech font-bold hover:underline flex items-center gap-1 cursor-pointer"
+                    style={{ color: 'var(--accent-bar, #2563eb)' }}
                   >
-                    <Terminal className="w-3 h-3" />
-                    [LAUNCH TOPOLOGY DIAGRAM]
+                    <Terminal className="w-2.5 h-2.5" />
+                    [TOPOLOGY]
                   </button>
                 )}
               </div>
 
               {data.projects.map((proj) => (
-                <div key={proj.id} className="p-3.5 rounded-lg border border-slate-300 bg-slate-50/50">
-                  <div className="flex items-baseline justify-between mb-1">
-                    <h3 className="text-xs font-bold text-slate-900 font-mono-tech">
+                <div 
+                  key={proj.id} 
+                  className="p-2.5 rounded-lg border"
+                  style={{ 
+                    borderColor: 'var(--accent-border, #bfdbfe)',
+                    backgroundColor: 'var(--primary-light, #eff6ff)'
+                  }}
+                >
+                  <div className="flex items-baseline justify-between mb-0.5">
+                    <h3 
+                      className="text-[11.5px] font-bold font-mono-tech"
+                      style={{ color: 'var(--heading-color, #1e3a8a)' }}
+                    >
                       {proj.title}
                     </h3>
-                    <span className="font-mono-tech text-[10px] text-slate-500">{proj.period}</span>
+                    <span className="font-mono-tech text-[9.5px] text-slate-500">{proj.period}</span>
                   </div>
-                  <p className="text-[11px] text-slate-600 mb-2 font-medium">
+                  <p className="text-[10px] text-slate-600 mb-1 font-medium">
                     {proj.subtitle}
                   </p>
 
-                  <ul className="space-y-1.5 text-xs text-slate-700 mb-3">
+                  <ul className="space-y-0.5 text-[11px] text-slate-700 mb-1.5">
                     {proj.bullets.map((b, idx) => (
-                      <li key={idx} className="flex items-start gap-2">
-                        <span className="text-slate-400 font-mono-tech mt-0.5">▸</span>
-                        <span className="leading-snug">{b}</span>
+                      <li key={idx} className="flex items-start gap-1.5">
+                        <span 
+                          className="font-mono-tech mt-0.5 text-[10px]"
+                          style={{ color: 'var(--accent-bar, #2563eb)' }}
+                        >
+                          ▸
+                        </span>
+                        <span className="leading-tight">{b}</span>
                       </li>
                     ))}
                   </ul>
 
                   {/* Tech stack badge matrix */}
-                  <div className="bg-white p-2 rounded border border-slate-200 text-[11px]">
-                    <div className="font-mono-tech text-[10px] font-bold text-slate-600 uppercase mb-1">
+                  <div 
+                    className="bg-white p-1.5 rounded border text-[10px]"
+                    style={{ borderColor: 'var(--accent-border, #bfdbfe)' }}
+                  >
+                    <div 
+                      className="font-mono-tech text-[9px] font-bold uppercase mb-0.5"
+                      style={{ color: 'var(--heading-color, #1e3a8a)' }}
+                    >
                       ENVIRONMENT STACK:
                     </div>
-                    <div className="flex flex-wrap gap-1 font-mono-tech text-[10px]">
+                    <div className="flex flex-wrap gap-1 font-mono-tech text-[9px]">
                       {proj.techStack.map((tech, idx) => (
-                        <span key={idx} className="bg-slate-100 text-slate-800 px-2 py-0.5 rounded border border-slate-300 font-medium">
+                        <span 
+                          key={idx} 
+                          className="px-1.5 py-0.5 rounded border font-medium"
+                          style={{
+                            backgroundColor: 'var(--badge-bg, #dbeafe)',
+                            color: 'var(--badge-text, #1e40af)',
+                            borderColor: 'var(--accent-border, #bfdbfe)'
+                          }}
+                        >
                           {tech}
                         </span>
                       ))}
@@ -226,28 +333,48 @@ export const IndustrialTheme: React.FC<Props> = ({ data, settings, onOpenTopolog
           </div>
 
           {/* Right Rail: Credentials, Training & Education (5 cols) */}
-          <div className="lg:col-span-5 space-y-4">
+          <div className="col-span-5 space-y-2.5">
             {/* Verified Certifications */}
-            <section className="bg-white p-3.5 rounded-lg border border-slate-200">
-              <h2 className="font-mono-tech text-xs font-bold uppercase tracking-wider text-slate-900 flex items-center gap-1.5 mb-2.5 pb-1 border-b border-slate-200">
-                <FileCheck className="w-4 h-4 text-emerald-600" />
-                Verified Certifications & Accreditations
+            <section 
+              className="bg-white p-2.5 rounded-lg border"
+              style={{ borderColor: 'var(--accent-border, #bfdbfe)' }}
+            >
+              <h2 
+                className="font-mono-tech text-[10.5px] font-bold uppercase tracking-wider flex items-center gap-1.5 mb-1.5 pb-0.5 border-b"
+                style={{ 
+                  color: 'var(--heading-color, #1e3a8a)',
+                  borderColor: 'var(--accent-border, #bfdbfe)'
+                }}
+              >
+                <FileCheck className="w-3.5 h-3.5" style={{ color: 'var(--accent-bar, #2563eb)' }} />
+                Verified Accreditations
               </h2>
-              <div className="space-y-3">
+              <div className="space-y-1.5">
                 {data.certifications.map((cert) => (
-                  <div key={cert.id} className="text-xs pb-2 border-b border-dashed border-slate-200 last:border-0 last:pb-0">
+                  <div 
+                    key={cert.id} 
+                    className="text-[10.5px] pb-1 border-b border-dashed last:border-0 last:pb-0"
+                    style={{ borderColor: 'var(--accent-border, #bfdbfe)' }}
+                  >
                     <div className="font-bold text-slate-900 flex items-start justify-between gap-1">
                       <span>{cert.title}</span>
                       {cert.badge && (
-                        <span className="shrink-0 font-mono-tech text-[9px] bg-slate-100 text-slate-700 font-semibold px-1.5 py-0.5 rounded border">
+                        <span 
+                          className="shrink-0 font-mono-tech text-[8.5px] font-semibold px-1 py-0.2 rounded border"
+                          style={{
+                            backgroundColor: 'var(--badge-bg, #dbeafe)',
+                            color: 'var(--badge-text, #1e40af)',
+                            borderColor: 'var(--accent-border, #bfdbfe)'
+                          }}
+                        >
                           {cert.badge}
                         </span>
                       )}
                     </div>
-                    <div className="text-[11px] text-slate-600 mt-0.5">
+                    <div className="text-[9.5px] text-slate-600 leading-tight">
                       {cert.issuer}
                     </div>
-                    <div className="flex items-center justify-between font-mono-tech text-[10px] text-slate-500 mt-1">
+                    <div className="flex items-center justify-between font-mono-tech text-[9px] text-slate-500 mt-0.5">
                       <span>{cert.date}</span>
                       {cert.credentialCode && <span>ID: {cert.credentialCode}</span>}
                     </div>
@@ -257,17 +384,26 @@ export const IndustrialTheme: React.FC<Props> = ({ data, settings, onOpenTopolog
             </section>
 
             {/* Academic & Technical Training */}
-            <section className="bg-white p-3.5 rounded-lg border border-slate-200">
-              <h2 className="font-mono-tech text-xs font-bold uppercase tracking-wider text-slate-900 flex items-center gap-1.5 mb-2.5 pb-1 border-b border-slate-200">
-                <Server className="w-4 h-4 text-slate-700" />
-                Education & Vocational History
+            <section 
+              className="bg-white p-2.5 rounded-lg border"
+              style={{ borderColor: 'var(--accent-border, #bfdbfe)' }}
+            >
+              <h2 
+                className="font-mono-tech text-[10.5px] font-bold uppercase tracking-wider flex items-center gap-1.5 mb-1.5 pb-0.5 border-b"
+                style={{ 
+                  color: 'var(--heading-color, #1e3a8a)',
+                  borderColor: 'var(--accent-border, #bfdbfe)'
+                }}
+              >
+                <Server className="w-3.5 h-3.5" style={{ color: 'var(--accent-bar, #2563eb)' }} />
+                Education & Training
               </h2>
-              <div className="space-y-3">
+              <div className="space-y-1.5">
                 {data.education.map((edu) => (
-                  <div key={edu.id} className="text-xs">
-                    <div className="font-bold text-slate-900">{edu.degree}</div>
-                    <div className="text-[11px] text-slate-600">{edu.institution}</div>
-                    <div className="flex justify-between font-mono-tech text-[10px] text-slate-500 mt-0.5">
+                  <div key={edu.id} className="text-[10.5px]">
+                    <div className="font-bold text-slate-900 leading-tight">{edu.degree}</div>
+                    <div className="text-[9.5px] text-slate-600 leading-tight">{edu.institution}</div>
+                    <div className="flex justify-between font-mono-tech text-[9px] text-slate-500">
                       <span>{edu.yearOrPeriod}</span>
                       {edu.location && <span>{edu.location}</span>}
                     </div>
@@ -276,27 +412,42 @@ export const IndustrialTheme: React.FC<Props> = ({ data, settings, onOpenTopolog
               </div>
 
               {/* Technical Training Syllabus Summary */}
-              <div className="mt-3 pt-2.5 border-t border-slate-200">
-                <div className="font-mono-tech text-[10px] font-bold uppercase text-slate-600 mb-1">
+              <div 
+                className="mt-1.5 pt-1.5 border-t"
+                style={{ borderColor: 'var(--accent-border, #bfdbfe)' }}
+              >
+                <div 
+                  className="font-mono-tech text-[9px] font-bold uppercase mb-0.5"
+                  style={{ color: 'var(--primary-color, #1e3a8a)' }}
+                >
                   CORE TECHNICAL CURRICULUM:
                 </div>
-                <p className="text-[11px] text-slate-700 leading-snug">
+                <p className="text-[10px] text-slate-700 leading-tight">
                   {data.technicalTraining}
                 </p>
               </div>
             </section>
 
             {/* Languages & Communication */}
-            <section className="bg-white p-3 rounded-lg border border-slate-200">
-              <h2 className="font-mono-tech text-xs font-bold uppercase tracking-wider text-slate-900 flex items-center gap-1.5 mb-2 pb-1 border-b border-slate-200">
-                <Settings2 className="w-4 h-4 text-slate-700" />
+            <section 
+              className="bg-white p-2 rounded-lg border"
+              style={{ borderColor: 'var(--accent-border, #bfdbfe)' }}
+            >
+              <h2 
+                className="font-mono-tech text-[10.5px] font-bold uppercase tracking-wider flex items-center gap-1.5 mb-1 pb-0.5 border-b"
+                style={{ 
+                  color: 'var(--heading-color, #1e3a8a)',
+                  borderColor: 'var(--accent-border, #bfdbfe)'
+                }}
+              >
+                <Settings2 className="w-3.5 h-3.5" style={{ color: 'var(--accent-bar, #2563eb)' }} />
                 Language Capabilities
               </h2>
-              <div className="space-y-1.5 text-xs">
+              <div className="space-y-0.5 text-[10px]">
                 {data.languages.map((lang) => (
-                  <div key={lang.id} className="flex justify-between items-center text-xs">
+                  <div key={lang.id} className="flex justify-between items-center">
                     <span className="font-medium text-slate-900">{lang.name}</span>
-                    <span className="font-mono-tech text-[11px] text-slate-500">{lang.level}</span>
+                    <span className="font-mono-tech text-[9.5px] text-slate-500">{lang.level}</span>
                   </div>
                 ))}
               </div>

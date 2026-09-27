@@ -1,5 +1,5 @@
 import React from 'react';
-import { Printer, Edit3, Network, CheckCircle2, FileText, Share2, Camera } from 'lucide-react';
+import { Printer, Download, Edit3, Network, CheckCircle2, FileText, Share2, Camera, Loader2, Mail } from 'lucide-react';
 
 interface Props {
   onOpenTopology: () => void;
@@ -8,7 +8,10 @@ interface Props {
   onOpenEditor: () => void;
   onOpenShare: () => void;
   onOpenPhotoModal: () => void;
+  onDownloadPdf: () => void;
   onPrint: () => void;
+  isGeneratingPdf?: boolean;
+  email?: string;
 }
 
 export const TopNav: React.FC<Props> = ({
@@ -18,7 +21,10 @@ export const TopNav: React.FC<Props> = ({
   onOpenEditor,
   onOpenShare,
   onOpenPhotoModal,
+  onDownloadPdf,
   onPrint,
+  isGeneratingPdf,
+  email = 'shankerdayallan80@gmail.com',
 }) => {
   return (
     <header className="no-print sticky top-0 z-40 w-full bg-slate-900/95 backdrop-blur-md border-b border-slate-800 text-slate-200">
@@ -31,8 +37,8 @@ export const TopNav: React.FC<Props> = ({
           Shanker Dayallan
         </a>
 
-        {/* Zone 2: Navigation Links (clean text links with subtle hover underlines) */}
-        <nav className="hidden lg:flex items-center gap-6 text-xs font-semibold text-slate-300">
+        {/* Zone 2: Navigation Links */}
+        <nav className="hidden lg:flex items-center gap-5 text-xs font-semibold text-slate-300">
           <button
             onClick={onOpenTopology}
             className="hover:text-white transition-colors cursor-pointer flex items-center gap-1.5 py-1"
@@ -66,11 +72,19 @@ export const TopNav: React.FC<Props> = ({
           </button>
         </nav>
 
-        {/* Zone 3: 1-2 primary actions */}
-        <div className="flex items-center gap-2.5">
+        {/* Zone 3: Actions */}
+        <div className="flex items-center gap-2">
+          <a 
+            href={`mailto:shankerdayallan80@gmail.com?subject=Job%20Opportunity%20-%20IT%20Support%20/%20IT/OT`}
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-blue-300 bg-blue-950/60 hover:bg-blue-900/60 rounded-lg border border-blue-700/50 transition-colors"
+          >
+            <Mail className="w-3.5 h-3.5 text-blue-400" />
+            <span>shankerdayallan80@gmail.com</span>
+          </a>
+
           <button
             onClick={onOpenShare}
-            className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-emerald-300 bg-emerald-950/60 hover:bg-emerald-900/60 rounded-lg border border-emerald-700/50 transition-colors cursor-pointer"
+            className="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-semibold text-emerald-300 bg-emerald-950/60 hover:bg-emerald-900/60 rounded-lg border border-emerald-700/50 transition-colors cursor-pointer"
           >
             <Share2 className="w-3.5 h-3.5" />
             <span>Share Link</span>
@@ -78,18 +92,37 @@ export const TopNav: React.FC<Props> = ({
 
           <button
             onClick={onOpenEditor}
-            className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-slate-300 bg-slate-800/90 hover:bg-slate-700 hover:text-white rounded-lg border border-slate-700 transition-colors cursor-pointer"
+            className="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-semibold text-slate-300 bg-slate-800/90 hover:bg-slate-700 hover:text-white rounded-lg border border-slate-700 transition-colors cursor-pointer"
           >
             <Edit3 className="w-3.5 h-3.5" />
-            <span>Edit Resume</span>
+            <span>Edit</span>
           </button>
 
           <button
             onClick={onPrint}
-            className="inline-flex items-center gap-1.5 px-4 py-1.5 text-xs font-semibold text-white bg-blue-600 hover:bg-blue-500 rounded-lg shadow-sm transition-colors cursor-pointer whitespace-nowrap"
+            className="hidden md:inline-flex items-center gap-1 px-2.5 py-1.5 text-xs font-medium text-slate-300 hover:text-white bg-slate-800/80 hover:bg-slate-700 rounded-lg border border-slate-700 transition-colors cursor-pointer"
+            title="Browser Print Preview"
           >
             <Printer className="w-3.5 h-3.5" />
-            <span>Save as PDF / Print</span>
+            <span>Print</span>
+          </button>
+
+          <button
+            onClick={onDownloadPdf}
+            disabled={isGeneratingPdf}
+            className="inline-flex items-center gap-1.5 px-3.5 py-1.5 text-xs font-semibold text-white bg-blue-600 hover:bg-blue-500 rounded-lg shadow-sm transition-colors cursor-pointer whitespace-nowrap disabled:opacity-50"
+          >
+            {isGeneratingPdf ? (
+              <>
+                <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                <span>Exporting...</span>
+              </>
+            ) : (
+              <>
+                <Download className="w-3.5 h-3.5" />
+                <span>Download 1-Page PDF</span>
+              </>
+            )}
           </button>
         </div>
       </div>

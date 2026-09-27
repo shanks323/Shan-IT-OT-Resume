@@ -1,13 +1,15 @@
 import React from 'react';
 import { 
   Printer, 
+  Download,
   Phone, 
   MessageSquare, 
   Mail, 
   Share2, 
   Sliders, 
   ShieldCheck, 
-  ExternalLink 
+  ExternalLink,
+  Loader2
 } from 'lucide-react';
 import { ResumeData } from '../data/resumeData';
 import { ResumeSettings } from '../types/resume';
@@ -16,6 +18,8 @@ interface Props {
   data: ResumeData;
   settings: ResumeSettings;
   onPrint: () => void;
+  onDownloadPdf: () => void;
+  isGeneratingPdf?: boolean;
   onOpenShare: () => void;
   onExitReadOnly: () => void;
   onOpenTopology: () => void;
@@ -25,6 +29,8 @@ export const ReadOnlyBanner: React.FC<Props> = ({
   data,
   settings,
   onPrint,
+  onDownloadPdf,
+  isGeneratingPdf,
   onOpenShare,
   onExitReadOnly,
   onOpenTopology,
@@ -51,7 +57,7 @@ export const ReadOnlyBanner: React.FC<Props> = ({
             <span>Variation: {themeLabels[settings.theme] || settings.theme}</span>
           </span>
           <span className="bg-slate-800 text-slate-400 px-2 py-0.5 rounded text-[10px] font-mono border border-slate-700">
-            READ-ONLY VIEW
+            A4 1-PAGE VIEW
           </span>
         </div>
 
@@ -74,20 +80,39 @@ export const ReadOnlyBanner: React.FC<Props> = ({
             <span>WhatsApp</span>
           </a>
 
-          <a
-            href={`mailto:${data.email}?subject=Job%20Opportunity%20-%20IT%20Support%20/%20IT/OT`}
-            className="px-2.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-300 font-medium transition-colors flex items-center gap-1.5 text-xs"
+          <a 
+            href={`mailto:shankerdayallan80@gmail.com?subject=Job%20Opportunity%20-%20IT%20Support%20/%20IT/OT`}
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-blue-300 bg-blue-950/60 hover:bg-blue-900/60 rounded-lg border border-blue-700/50 transition-colors"
           >
-            <Mail className="w-3.5 h-3.5 text-slate-400" />
-            <span>Email</span>
+            <Mail className="w-3.5 h-3.5 text-blue-400" />
+            <span>shankerdayallan80@gmail.com</span>
           </a>
 
           <button
             onClick={onPrint}
-            className="px-3.5 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-white font-semibold transition-colors cursor-pointer flex items-center gap-1.5 text-xs shadow-sm"
+            className="hidden sm:inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-300 font-medium transition-colors cursor-pointer text-xs"
+            title="Browser Print Preview"
           >
             <Printer className="w-3.5 h-3.5" />
-            <span>Save as PDF</span>
+            <span>Print</span>
+          </button>
+
+          <button
+            onClick={onDownloadPdf}
+            disabled={isGeneratingPdf}
+            className="px-3.5 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-white font-semibold transition-colors cursor-pointer flex items-center gap-1.5 text-xs shadow-sm disabled:opacity-50"
+          >
+            {isGeneratingPdf ? (
+              <>
+                <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                <span>Exporting...</span>
+              </>
+            ) : (
+              <>
+                <Download className="w-3.5 h-3.5" />
+                <span>Download 1-Page PDF</span>
+              </>
+            )}
           </button>
 
           <button
@@ -102,7 +127,7 @@ export const ReadOnlyBanner: React.FC<Props> = ({
             onClick={onExitReadOnly}
             className="ml-2 text-[11px] text-slate-400 hover:text-blue-400 underline cursor-pointer transition-colors"
           >
-            Open Interactive Studio
+            Studio
           </button>
         </div>
       </div>

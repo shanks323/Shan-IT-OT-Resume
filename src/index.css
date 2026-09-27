@@ -1,5 +1,20 @@
 @import "tailwindcss";
 
+:root {
+  --primary-color: #1e3a8a;
+  --primary-light: #eff6ff;
+  --primary-dark: #172554;
+  --sidebar-bg: #0b1a30;
+  --accent-bar: #2563eb;
+  --accent-border: #bfdbfe;
+  --badge-bg: #dbeafe;
+  --badge-text: #1e40af;
+  --tag-bg: #f1f5f9;
+  --tag-text: #1e293b;
+  --heading-color: #1e3a8a;
+  --icon-color: #2563eb;
+}
+
 @layer base {
   body {
     font-family: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
@@ -14,45 +29,221 @@
   font-family: 'JetBrains Mono', monospace;
 }
 
-/* Print Specific Optimizations */
+/* ==========================================================================
+   Print Specific Optimizations: Strictly Identical to Main Screen Display
+   ========================================================================== */
 @media print {
   @page {
     size: A4 portrait;
-    margin: 8mm 10mm;
+    margin: 0 !important;
   }
   
-  html, body {
-    background-color: #ffffff !important;
-    color: #0f172a !important;
-    font-size: 11pt;
-    margin: 0 !important;
-    padding: 0 !important;
+  *, *::before, *::after {
     -webkit-print-color-adjust: exact !important;
+    color-adjust: exact !important;
     print-color-adjust: exact !important;
   }
 
-  .no-print {
+  html, body {
+    width: 210mm !important;
+    height: 99% !important;
+    max-height: 99% !important;
+    overflow: hidden !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background-color: #ffffff !important;
+    color: #0f172a !important;
+  }
+
+  /* --------------------------------------------------------------------------
+     2. HIDE THE UI TOOLBARS AND BUTTON BUFFERS:
+     Ensure all top navigation components, theme switchers, floating quickbars,
+     interactive helper buttons, and photo overlays are completely hidden.
+     -------------------------------------------------------------------------- */
+  .no-print,
+  header.no-print,
+  aside.no-print,
+  nav.no-print,
+  button,
+  .top-nav,
+  .theme-toolbar,
+  .recruiter-banner,
+  .readonly-banner,
+  .floating-quickbar,
+  .theme-switcher,
+  .toolbar-controls,
+  .change-photo-badge,
+  .photo-overlay-badge,
+  .interactive-topology-btn,
+  .diagram-button,
+  .schematic-button {
     display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
   }
 
   .print-only {
     display: block !important;
   }
 
+  main {
+    padding: 0 !important;
+    margin: 0 !important;
+    background: transparent !important;
+    width: 210mm !important;
+    height: 100% !important;
+    max-height: 100% !important;
+    overflow: hidden !important;
+    display: block !important;
+  }
+
+  /* Base Paper Sheet Reset with Strict Height Containment */
   .resume-paper {
-    box-shadow: none !important;
+    width: 210mm !important;
+    height: 100% !important;
+    max-width: 210mm !important;
+    max-height: 100% !important;
+    margin: 0 !important;
+    padding: 10px 24px !important;
+    box-sizing: border-box !important;
+    background: #ffffff !important;
     border: none !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    overflow: hidden !important;
+    page-break-after: avoid !important;
+    page-break-inside: avoid !important;
+    break-after: avoid !important;
+    break-inside: avoid !important;
+  }
+
+  .main-container {
+    padding-top: 8px !important;
+    padding-bottom: 8px !important;
+  }
+
+  section {
+    margin-bottom: 6px !important;
+  }
+
+  p, li {
+    margin-bottom: 2px !important;
+    line-height: 1.25 !important;
+  }
+
+  /* --------------------------------------------------------------------------
+     3. PRESERVE TWO-COLUMN GRID: Creative Split layout
+     Keep .theme-creative .creative-split-grid set to an active grid with 12 cols,
+     dark blue left sidebar (#0b1a30) and right main content side-by-side.
+     -------------------------------------------------------------------------- */
+  .theme-creative.resume-paper {
+    padding: 0 !important;
+    border: none !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    background-color: #ffffff !important;
+    max-height: 100% !important;
+    height: 100% !important;
+  }
+
+  .theme-creative .creative-split-grid {
+    display: grid !important;
+    grid-template-columns: repeat(12, minmax(0, 1fr)) !important;
+    width: 210mm !important;
+    height: 100% !important;
+    max-height: 100% !important;
     margin: 0 !important;
     padding: 0 !important;
-    max-width: 100% !important;
+    border: none !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    overflow: hidden !important;
+  }
+
+  /* Left 4-column Sidebar in dark blue #0b1a30 (or dynamic --sidebar-bg) */
+  .theme-creative .dark-sidebar,
+  .theme-creative .resume-dark-sidebar,
+  .theme-creative .creative-split-sidebar {
+    grid-column: span 4 / span 4 !important;
     width: 100% !important;
-    background: #ffffff !important;
-    page-break-after: avoid;
-    break-after: avoid;
+    background-color: var(--sidebar-bg, #0b1a30) !important;
+    height: 100% !important;
+    max-height: 100% !important;
+    padding: 10px 12px !important;
+    box-sizing: border-box !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: space-between !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    -webkit-print-color-adjust: exact !important;
+    color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    overflow: hidden !important;
+  }
+
+  /* --------------------------------------------------------------------------
+     1. FIX VERTICAL CONTENT CUTOFF:
+     Loosen strict full-height stretching, pack content more closely, reduce base font
+     size slightly, and set .profile-block, .experience-block, and .projects-block
+     to a tight 4px margin-bottom so Education fits completely on 1 page.
+     -------------------------------------------------------------------------- */
+  .theme-creative .creative-split-main {
+    grid-column: span 8 / span 8 !important;
+    width: 100% !important;
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: 100% !important;
+    padding: 8px 14px !important;
+    box-sizing: border-box !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: flex-start !important;
+    line-height: 1.25 !important;
+    overflow: hidden !important;
+    font-size: 10px !important;
+  }
+
+  /* Tight 4px margin-bottom between content sections */
+  .theme-creative .creative-split-main .profile-block {
+    margin-bottom: 4px !important;
+  }
+
+  .theme-creative .creative-split-main .experience-block {
+    margin-bottom: 4px !important;
+  }
+
+  .theme-creative .creative-split-main .projects-block {
+    margin-bottom: 4px !important;
+  }
+
+  .theme-creative .creative-split-main .education-block {
+    margin-bottom: 0px !important;
+  }
+
+  .theme-creative .creative-split-main p,
+  .theme-creative .creative-split-main li,
+  .theme-creative .creative-split-main span,
+  .theme-creative .creative-split-main div {
+    line-height: 1.25 !important;
+  }
+
+  .theme-creative .creative-split-main ul {
+    margin-top: 1px !important;
+    margin-bottom: 2px !important;
+  }
+
+  .theme-creative .creative-split-main li {
+    margin-bottom: 1.5px !important;
+  }
+
+  .theme-creative .creative-split-main h2 {
+    margin-bottom: 2px !important;
+    padding-bottom: 1px !important;
   }
 
   .page-break-inside-avoid {
-    break-inside: avoid;
-    page-break-inside: avoid;
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
   }
 }
